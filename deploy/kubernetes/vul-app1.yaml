@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vul-app-1
+  namespace: l4j-demo
+  labels:
+    app: vul-app-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vul-app-1
+  template:
+    metadata:
+      labels:
+        app: vul-app-1
+    spec:
+      containers:
+        - name: vul-app-1
+          image: jtb75/l4s-demo-app:1.0
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: l4j-demo
+  name: vul-app-1
+  labels:
+    app: vul-app-1
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    app: vul-app-1

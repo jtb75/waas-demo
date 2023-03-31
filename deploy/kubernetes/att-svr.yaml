@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: att-svr
+  namespace: l4j-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: att-svr
+  template:
+    metadata:
+      labels:
+        app: att-svr
+    spec:
+      containers:
+        - name: att-svr
+          image: jtb75/l4s-demo-svr:1.0
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 1389
+              name: jndi
+            - containerPort: 8888
+              name: java
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: l4j-demo
+  name: att-svr
+  labels:
+    app: att-svr
+spec:
+  type: ClusterIP
+  ports:
+    - name: jndi
+      port: 1389
+    - name: java
+      port: 8888
+  selector:
+    app: att-svr
